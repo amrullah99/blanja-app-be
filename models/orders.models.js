@@ -3,7 +3,7 @@ const db = require("../database")
 const getAll = async (sortType, id) => {
   try {
     const query =
-      await db`SELECT *, count(*) OVER() AS full_count FROM orders WHERE user_id = ${id} ORDER BY id ${sortType}`
+      await db`SELECT *, count(*) OVER() AS full_count FROM orders WHERE user_id = ${id} ORDER BY createdat ${sortType}`
     return query
   } catch (error) {
     console.log(error)
@@ -20,6 +20,16 @@ const getById = async (id) => {
   }
 }
 
+const getByUserId = async (user_id, sortType) => {
+  try {
+    const query =
+      await db`SELECT *, count(*) OVER() AS full_count FROM orders WHERE user_id = ${user_id} ORDER BY createdat ${sortType}`
+    return query
+  } catch (error) {
+    return error
+  }
+}
+
 const create = async (payload) => {
   try {
     const query = await db`INSERT INTO orders ${db(
@@ -29,8 +39,36 @@ const create = async (payload) => {
       "quantity",
       "paymentmethod",
       "address_id",
-      "total"
+      "total",
+      "createdat"
     )} returning *`
+    return query
+  } catch (error) {
+    return error
+  }
+}
+
+const update = async (payload, id) => {
+  try {
+    const query = await db`UPDATE orders SET ${db(
+      payload,
+      "product_id",
+      "user_id",
+      "quantity",
+      "paymentmethod",
+      "address_id",
+      "total",
+      "createdat"
+    )} WHERE id = ${id} returning *`
+    return query
+  } catch (error) {
+    return error
+  }
+}
+
+const deleteOrders = async (id) => {
+  try {
+    const query = await db`DELETE FROM orders WHERE id = ${id} returning *`
     return query
   } catch (error) {
     return error
@@ -40,5 +78,8 @@ const create = async (payload) => {
 module.exports = {
   getAll,
   getById,
+  getByUserId,
   create,
+  update,
+  deleteOrders,
 }

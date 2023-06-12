@@ -44,7 +44,8 @@ const create = async (payload) => {
       "price",
       "stock",
       "description",
-      "category"
+      "category",
+      "storename"
     )} returning *`
     return query
   } catch (error) {
@@ -60,7 +61,8 @@ const update = async (payload, id) => {
       "price",
       "stock",
       "description",
-      "category"
+      "category",
+      "storename"
     )} WHERE id = ${id} returning *`
     return query
   } catch (error) {

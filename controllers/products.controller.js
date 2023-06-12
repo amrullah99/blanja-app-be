@@ -156,8 +156,8 @@ const getByCategory = async (req, res) => {
 
 const create = async (req, res) => {
   try {
-    const { title, price, stock, description, category } = req.body
-    if (!(title && price && stock && description && category)) {
+    const { title, price, stock, description, category, storename } = req.body
+    if (!(title && price && stock && description && category && storename)) {
       res.status(400).json({
         status: false,
         message: "Bad input, please complete all of fields",
@@ -175,7 +175,7 @@ const create = async (req, res) => {
     if (!productpictures) {
       res.status(400).send({
         status: false,
-        message: "Recipe Picture is required",
+        message: "Products Picture is required",
       })
     }
     let mimeType = productpictures.mimetype.split("/")[1]
@@ -210,6 +210,7 @@ const create = async (req, res) => {
           stock,
           description,
           category,
+          storename,
         }
         await model.create(payload)
         res.status(200).send({
@@ -240,7 +241,7 @@ const update = async (req, res) => {
         params: { id },
       } = req
       const {
-        body: { title, price, stock, description, category },
+        body: { title, price, stock, description, category, storename },
       } = req
       let checkData = await model.getById(id)
       if (!checkData?.length) {
@@ -255,6 +256,7 @@ const update = async (req, res) => {
         stock: stock ?? checkData[0].stock,
         description: description ?? checkData[0].description,
         category: category ?? checkData[0].category,
+        storename: storename ?? checkData[0].storename,
       }
       if (payload.title.split(" ").length < 2) {
         res.status(400).json({
