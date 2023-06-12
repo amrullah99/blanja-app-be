@@ -214,6 +214,8 @@ const create = async (req, res) => {
       const minutes = `0${dateObject.getMinutes()}`.slice(-2)
       const seconds = `0${dateObject.getSeconds()}`.slice(-2)
       const createdat = `${year}-${month}-${date} ${hours}:${minutes}:${seconds}`
+      const paymentstatus = "Not yet paid"
+      const orderstatus = ""
       const payload = {
         product_id,
         user_id,
@@ -222,6 +224,8 @@ const create = async (req, res) => {
         address_id,
         total,
         createdat,
+        paymentstatus,
+        orderstatus,
       }
       await model.create(payload)
       res.status(200).send({
@@ -253,6 +257,8 @@ const update = async (req, res) => {
           paymentmethod,
           address_id,
           total,
+          paymentstatus,
+          orderstatus,
         },
       } = req
       let checkData = await model.getById(id)
@@ -270,6 +276,8 @@ const update = async (req, res) => {
         address_id: address_id ?? checkData[0].address_id,
         total: total ?? checkData[0].total,
         createdat: checkData[0].createdat,
+        paymentstatus: paymentstatus ?? checkData[0].paymentstatus,
+        orderstatus: orderstatus ?? checkData[0].orderstatus,
       }
       if (isNaN(payload.product_id)) {
         res.status(400).send({

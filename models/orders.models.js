@@ -40,7 +40,9 @@ const create = async (payload) => {
       "paymentmethod",
       "address_id",
       "total",
-      "createdat"
+      "createdat",
+      "paymentstatus",
+      "orderstatus"
     )} returning *`
     return query
   } catch (error) {
@@ -58,7 +60,9 @@ const update = async (payload, id) => {
       "paymentmethod",
       "address_id",
       "total",
-      "createdat"
+      "createdat",
+      "paymentstatus",
+      "orderstatus"
     )} WHERE id = ${id} returning *`
     return query
   } catch (error) {
