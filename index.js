@@ -10,6 +10,9 @@ const addressRoutes = require("./routes/address.routes")
 const ordersRoutes = require("./routes/orders.routes")
 const invalidRoutes = require("./routes/404.routes")
 
+const helmet = require("helmet")
+const xss = require("xss-clean")
+const cors = require("cors")
 const fileUpload = require("express-fileupload")
 
 // parse application/x-www-form-urlencoded
@@ -18,6 +21,9 @@ app.use(bodyParser.urlencoded({ extended: false }))
 // parse application/json
 app.use(bodyParser.json())
 
+app.use(helmet())
+app.use(xss())
+app.use(cors())
 app.use(
   fileUpload({
     useTempFiles: true,
