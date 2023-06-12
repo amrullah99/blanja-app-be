@@ -34,10 +34,7 @@ const create = async (payload) => {
       payload,
       "fullname",
       "email",
-      "password",
-      "phonenumber",
-      "gender",
-      "dateofbirth"
+      "password"
     )} returning *`
     return query
   } catch (error) {

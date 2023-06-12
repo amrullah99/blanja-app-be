@@ -74,11 +74,8 @@ const getById = async (req, res) => {
 
 const create = async (req, res) => {
   try {
-    const { fullname, email, password, phonenumber, gender, dateofbirth } =
-      req.body
-    if (
-      !(fullname && email && password && phonenumber && gender && dateofbirth)
-    ) {
+    const { fullname, email, password } = req.body
+    if (!(fullname && email && password)) {
       res.status(400).json({
         status: false,
         message: "Bad input, please complete all of fields",
@@ -111,13 +108,13 @@ const create = async (req, res) => {
       })
       return
     }
-    if (phonenumber.length < 11) {
-      res.status(400).json({
-        status: false,
-        message: "Phone Number is invalid! Must be greater than or equal to 11",
-      })
-      return
-    }
+    // if (phonenumber.length < 11) {
+    //   res.status(400).json({
+    //     status: false,
+    //     message: "Phone Number is invalid! Must be greater than or equal to 11",
+    //   })
+    //   return
+    // }
     if (password.length < 6) {
       res.status(400).json({
         status: false,
@@ -129,9 +126,6 @@ const create = async (req, res) => {
       fullname,
       email,
       password,
-      phonenumber,
-      gender,
-      dateofbirth,
     }
     bcrypt.genSalt(saltRounds, function (err, salt) {
       bcrypt.hash(password, salt, async function (err, hash) {
@@ -316,19 +310,19 @@ const updatePhoto = async (req, res) => {
 const deleteUser = async (req, res) => {
   try {
     const checkData = await model.getById(id)
-        if (!checkData?.length) {
-          res.status(404).json({
-            status: false,
-            message: `ID ${id} not found`,
-          })
-          return
-        }
-        const query = await model.deleteUser(id)
-        res.send({
-          status: true,
-          message: "Success delete data",
-          data: query,
-        })
+    if (!checkData?.length) {
+      res.status(404).json({
+        status: false,
+        message: `ID ${id} not found`,
+      })
+      return
+    }
+    const query = await model.deleteUser(id)
+    res.send({
+      status: true,
+      message: "Success delete data",
+      data: query,
+    })
   } catch (error) {
     console.log(error)
     res.status(500).send({
