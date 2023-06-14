@@ -8,6 +8,7 @@ const authRoutes = require("./routes/auth.routes")
 const productsRoutes = require("./routes/products.routes")
 const addressRoutes = require("./routes/address.routes")
 const ordersRoutes = require("./routes/orders.routes")
+const paymentRoutes = require("./routes/payment.routes")
 const invalidRoutes = require("./routes/404.routes")
 
 const helmet = require("helmet")
@@ -36,6 +37,7 @@ app.use(authRoutes)
 app.use(productsRoutes)
 app.use(addressRoutes)
 app.use(ordersRoutes)
+app.use(paymentRoutes)
 
 // Home
 app.get("/", (req, res) => {
