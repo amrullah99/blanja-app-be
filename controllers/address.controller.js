@@ -105,7 +105,7 @@ const getByUserId = async (req, res) => {
     }
     const query = await model.getByUserId(userid)
     if (!query?.length) {
-      res.status(400).json({
+      res.status(200).json({
         status: false,
         message: `ID ${userid} not found!`,
       })
