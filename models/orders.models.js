@@ -30,6 +30,15 @@ const getByUserId = async (user_id, sortType) => {
   }
 }
 
+const getByPaymentId = async (id) => {
+  try {
+    const query = await db`SELECT * FROM orders WHERE payment_id = ${id}`
+    return query
+  } catch (error) {
+    return error
+  }
+}
+
 const create = async (payload) => {
   try {
     const query = await db`INSERT INTO orders ${db(
@@ -81,6 +90,7 @@ module.exports = {
   getAll,
   getById,
   getByUserId,
+  getByPaymentId,
   create,
   update,
   deleteOrders,

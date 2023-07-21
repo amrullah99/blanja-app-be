@@ -148,6 +148,39 @@ const getByUserId = async (req, res) => {
   }
 }
 
+getByPaymentId = async (req, res) => {
+  try {
+    const {
+      params: { id },
+    } = req
+    if (!id) {
+      res.status(400).json({
+        status: false,
+        message: "Please insert payment ID",
+      })
+      return
+    }
+    const query = await model.getByPaymentId(id)
+    if (!query?.length) {
+      res.status(400).json({
+        status: false,
+        message: `Payment ID ${id} not found!`,
+      })
+    }
+    res.json({
+      status: true,
+      message: "Get success",
+      data: query,
+    })
+  } catch (error) {
+    console.log(error)
+    res.status(500).send({
+      status: false,
+      message: "Error in server",
+    })
+  }
+}
+
 const create = async (req, res) => {
   try {
     jwt.verify(getToken(req), process.env.JWT_PRIVATE_KEY, async (err) => {
@@ -346,6 +379,7 @@ module.exports = {
   getAll,
   getById,
   getByUserId,
+  getByPaymentId,
   create,
   update,
   deleteOrders,

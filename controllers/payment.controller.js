@@ -1,4 +1,4 @@
-const model = require("../models/payment.models")
+const orderModel = require("../models/payment.models")
 const userModel = require("../models/users.models")
 const db = require("../database")
 const midtransClient = require("midtrans-client")
@@ -17,7 +17,7 @@ const create = async (req, res) => {
     // transaction token
     let transactionToken = transaction.token
     const payload = {}
-    await model.create()
+    await orderModel.create()
     res.json({
       status: true,
       message: "Create Payment Success",
