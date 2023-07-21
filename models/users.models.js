@@ -49,9 +49,9 @@ const update = async (payload, id) => {
       "fullname",
       "email",
       "password",
-      "phonenumber",
+      "phone_number",
       "gender",
-      "dateofbirth"
+      "date_of_birth"
     )} WHERE id = ${id} returning *`
     return query
   } catch (error) {
@@ -63,7 +63,7 @@ const updatePhoto = async (payload, id) => {
   try {
     const query = await db`UPDATE users set ${db(
       payload,
-      "profilepicture"
+      "profile_picture"
     )} WHERE id = ${id} returning *`
     return query
   } catch (error) {

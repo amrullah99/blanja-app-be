@@ -40,12 +40,12 @@ const create = async (payload) => {
     const query = await db`INSERT INTO products ${db(
       payload,
       "title",
-      "productpictures",
+      "product_picture",
       "price",
       "stock",
       "description",
       "category",
-      "storename"
+      "store_name"
     )} returning *`
     return query
   } catch (error) {
@@ -62,7 +62,19 @@ const update = async (payload, id) => {
       "stock",
       "description",
       "category",
-      "storename"
+      "store_name"
+    )} WHERE id = ${id} returning *`
+    return query
+  } catch (error) {
+    return error
+  }
+}
+
+const updatePhoto = async (payload, id) => {
+  try {
+    const query = await db`UPDATE products SET ${db(
+      payload,
+      "product_picture"
     )} WHERE id = ${id} returning *`
     return query
   } catch (error) {
@@ -86,4 +98,5 @@ module.exports = {
   create,
   update,
   deleteProducts,
+  updatePhoto,
 }

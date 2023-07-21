@@ -154,7 +154,14 @@ const update = async (req, res) => {
       process.env.JWT_PRIVATE_KEY,
       async (err, { id }) => {
         const {
-          body: { fullname, email, password, phonenumber, gender, dateofbirth },
+          body: {
+            fullname,
+            email,
+            password,
+            phone_number,
+            gender,
+            date_of_birth,
+          },
         } = req
         let checkData = await model.getById(id)
         if (!checkData?.length) {
@@ -166,10 +173,10 @@ const update = async (req, res) => {
         const payload = {
           email: email ?? checkData[0].email,
           fullname: fullname ?? checkData[0].fullname,
-          phonenumber: phonenumber ?? checkData[0].phonenumber,
+          phone_number: phone_number ?? checkData[0].phone_number,
           password: password ?? checkData[0].password,
           gender: gender ?? checkData[0].gender,
-          dateofbirth: dateofbirth ?? checkData[0].dateofbirth,
+          date_of_birth: date_of_birth ?? checkData[0].date_of_birth,
         }
         const { valid, reason, validators } =
           await emailValidation.isEmailValid(payload.email)
@@ -199,7 +206,7 @@ const update = async (req, res) => {
           })
           return
         }
-        if (payload.phonenumber.length < 11) {
+        if (payload.phone_number.length < 11) {
           res.status(400).json({
             status: false,
             message:
@@ -281,7 +288,7 @@ const updatePhoto = async (req, res) => {
         upload
           .then(async (data) => {
             const payload = {
-              profilepicture: data?.secure_url,
+              profile_picture: data?.secure_url,
             }
             await model.updatePhoto(payload, id)
             res.status(200).send({

@@ -32,11 +32,11 @@ const create = async (payload) => {
   try {
     const query = await db`INSERT INTO address ${db(
       payload,
-      "addressas",
-      "recipientsname",
-      "recipientsphonenumber",
+      "address_as",
+      "recipients_name",
+      "recipients_phone_number",
       "address",
-      "postalcode",
+      "postal_code",
       "city",
       "user_id"
     )} returning *`
@@ -50,11 +50,11 @@ const update = async (payload, id) => {
   try {
     const query = await db`UPDATE address SET ${db(
       payload,
-      "addressas",
-      "recipientsname",
-      "recipientsphonenumber",
+      "address_as",
+      "recipients_name",
+      "recipients_phone_number",
       "address",
-      "postalcode",
+      "postal_code",
       "city",
       "user_id"
     )} WHERE id = ${id} returning *`

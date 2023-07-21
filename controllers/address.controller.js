@@ -128,21 +128,21 @@ const create = async (req, res) => {
   try {
     jwt.verify(getToken(req), process.env.JWT_PRIVATE_KEY, async (err) => {
       const {
-        addressas,
-        recipientsname,
-        recipientsphonenumber,
+        address_as,
+        recipients_name,
+        recipients_phone_number,
         address,
-        postalcode,
+        postal_code,
         city,
         user_id,
       } = req.body
       if (
         !(
-          addressas &&
-          recipientsname &&
-          recipientsphonenumber &&
+          address_as &&
+          recipients_name &&
+          recipients_phone_number &&
           address &&
-          postalcode &&
+          postal_code &&
           city &&
           user_id
         )
@@ -153,7 +153,7 @@ const create = async (req, res) => {
         })
         return
       }
-      if (recipientsname.length < 3) {
+      if (recipients_name.length < 3) {
         res.status(400).json({
           status: false,
           message:
@@ -161,7 +161,7 @@ const create = async (req, res) => {
         })
         return
       }
-      if (recipientsphonenumber.length < 11) {
+      if (recipients_phone_number.length < 11) {
         res.status(400).json({
           status: false,
           message:
@@ -176,7 +176,7 @@ const create = async (req, res) => {
         })
         return
       }
-      if (isNaN(postalcode) || postalcode.length != 5) {
+      if (isNaN(postal_code) || postal_code.length != 5) {
         res.status(400).send({
           status: false,
           message:
@@ -197,11 +197,11 @@ const create = async (req, res) => {
         })
       }
       const payload = {
-        addressas,
-        recipientsname,
-        recipientsphonenumber,
+        address_as,
+        recipients_name,
+        recipients_phone_number,
         address,
-        postalcode,
+        postal_code,
         city,
         user_id,
       }
@@ -229,11 +229,11 @@ const update = async (req, res) => {
       } = req
       const {
         body: {
-          addressas,
-          recipientsname,
-          recipientsphonenumber,
+          address_as,
+          recipients_name,
+          recipients_phone_number,
           address,
-          postalcode,
+          postal_code,
           city,
           user_id,
         },
@@ -246,16 +246,16 @@ const update = async (req, res) => {
         })
       }
       const payload = {
-        addressas: addressas ?? checkData[0].addressas,
-        recipientsname: recipientsname ?? checkData[0].recipientsname,
-        recipientsphonenumber:
-          recipientsphonenumber ?? checkData[0].recipientsphonenumber,
+        address_as: address_as ?? checkData[0].address_as,
+        recipients_name: recipients_name ?? checkData[0].recipients_name,
+        recipients_phone_number:
+          recipients_phone_number ?? checkData[0].recipients_phone_number,
         address: address ?? checkData[0].address,
-        postalcode: postalcode ?? checkData[0].postalcode,
+        postal_code: postal_code ?? checkData[0].postal_code,
         city: city ?? checkData[0].city,
         user_id: user_id ?? checkData[0].user_id,
       }
-      if (payload.recipientsname.length < 3) {
+      if (payload.recipients_name.length < 3) {
         res.status(400).json({
           status: false,
           message:
@@ -263,7 +263,7 @@ const update = async (req, res) => {
         })
         return
       }
-      if (payload.recipientsphonenumber.length < 11) {
+      if (payload.recipients_phone_number.length < 11) {
         res.status(400).json({
           status: false,
           message:
@@ -278,7 +278,7 @@ const update = async (req, res) => {
         })
         return
       }
-      if (isNaN(payload.postalcode) || payload.postalcode.length != 5) {
+      if (isNaN(payload.postal_code) || payload.postal_code.length != 5) {
         res.status(400).send({
           status: false,
           message:

@@ -151,22 +151,16 @@ const getByUserId = async (req, res) => {
 const create = async (req, res) => {
   try {
     jwt.verify(getToken(req), process.env.JWT_PRIVATE_KEY, async (err) => {
-      const {
-        product_id,
-        user_id,
-        quantity,
-        paymentmethod,
-        address_id,
-        total,
-      } = req.body
+      const { product_id, user_id, quantity, address_id, total, payment_id } =
+        req.body
       if (
         !(
           product_id &&
           user_id &&
           quantity &&
-          paymentmethod &&
           address_id &&
-          total
+          total &&
+          payment_id
         )
       ) {
         res.status(400).json({
@@ -209,23 +203,20 @@ const create = async (req, res) => {
       const date = `0${dateObject.getDate()}`.slice(-2)
       const month = `0${dateObject.getMonth() + 1}`.slice(-2)
       const year = dateObject.getFullYear()
-      // const hourssave = `0${dateObject.getHours() + 7}`.slice(-2)
       const hours = `0${dateObject.getHours()}`.slice(-2)
       const minutes = `0${dateObject.getMinutes()}`.slice(-2)
       const seconds = `0${dateObject.getSeconds()}`.slice(-2)
-      const createdat = `${year}-${month}-${date} ${hours}:${minutes}:${seconds}`
-      const paymentstatus = "Not yet paid"
-      const orderstatus = ""
+      const created_at = `${year}-${month}-${date} ${hours}:${minutes}:${seconds}`
+      const order_status = ""
       const payload = {
         product_id,
         user_id,
         quantity,
-        paymentmethod,
         address_id,
         total,
-        createdat,
-        paymentstatus,
-        orderstatus,
+        created_at,
+        payment_id,
+        order_status,
       }
       await model.create(payload)
       res.status(200).send({
@@ -254,11 +245,10 @@ const update = async (req, res) => {
           product_id,
           user_id,
           quantity,
-          paymentmethod,
           address_id,
           total,
-          paymentstatus,
-          orderstatus,
+          payment_id,
+          order_status,
         },
       } = req
       let checkData = await model.getById(id)
@@ -272,12 +262,11 @@ const update = async (req, res) => {
         product_id: product_id ?? checkData[0].product_id,
         user_id: user_id ?? checkData[0].user_id,
         quantity: quantity ?? checkData[0].quantity,
-        paymentmethod: paymentmethod ?? checkData[0].paymentmethod,
         address_id: address_id ?? checkData[0].address_id,
         total: total ?? checkData[0].total,
-        createdat: checkData[0].createdat,
-        paymentstatus: paymentstatus ?? checkData[0].paymentstatus,
-        orderstatus: orderstatus ?? checkData[0].orderstatus,
+        created_at: checkData[0].created_at,
+        payment_id: payment_id ?? checkData[0].payment_id,
+        order_status: order_status ?? checkData[0].order_status,
       }
       if (isNaN(payload.product_id)) {
         res.status(400).send({

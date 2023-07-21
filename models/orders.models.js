@@ -3,7 +3,7 @@ const db = require("../database")
 const getAll = async (sortType, id) => {
   try {
     const query =
-      await db`SELECT *, count(*) OVER() AS full_count FROM orders WHERE user_id = ${id} ORDER BY createdat ${sortType}`
+      await db`SELECT *, count(*) OVER() AS full_count FROM orders WHERE user_id = ${id} ORDER BY created_at ${sortType}`
     return query
   } catch (error) {
     console.log(error)
@@ -23,7 +23,7 @@ const getById = async (id) => {
 const getByUserId = async (user_id, sortType) => {
   try {
     const query =
-      await db`SELECT *, count(*) OVER() AS full_count FROM orders WHERE user_id = ${user_id} ORDER BY createdat ${sortType}`
+      await db`SELECT *, count(*) OVER() AS full_count FROM orders WHERE user_id = ${user_id} ORDER BY created_at ${sortType}`
     return query
   } catch (error) {
     return error
@@ -37,12 +37,11 @@ const create = async (payload) => {
       "product_id",
       "user_id",
       "quantity",
-      "paymentmethod",
       "address_id",
       "total",
-      "createdat",
-      "paymentstatus",
-      "orderstatus"
+      "created_at",
+      "payment_id",
+      "order_status"
     )} returning *`
     return query
   } catch (error) {
@@ -57,12 +56,11 @@ const update = async (payload, id) => {
       "product_id",
       "user_id",
       "quantity",
-      "paymentmethod",
       "address_id",
       "total",
-      "createdat",
-      "paymentstatus",
-      "orderstatus"
+      "created_at",
+      "payment_id",
+      "order_status"
     )} WHERE id = ${id} returning *`
     return query
   } catch (error) {

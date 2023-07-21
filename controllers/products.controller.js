@@ -156,8 +156,8 @@ const getByCategory = async (req, res) => {
 
 const create = async (req, res) => {
   try {
-    const { title, price, stock, description, category, storename } = req.body
-    if (!(title && price && stock && description && category && storename)) {
+    const { title, price, stock, description, category, store_name } = req.body
+    if (!(title && price && stock && description && category && store_name)) {
       res.status(400).json({
         status: false,
         message: "Bad input, please complete all of fields",
@@ -171,14 +171,14 @@ const create = async (req, res) => {
       })
       return
     }
-    const { productpictures } = req?.files ?? {}
-    if (!productpictures) {
+    const { product_picture } = req?.files ?? {}
+    if (!product_picture) {
       res.status(400).send({
         status: false,
         message: "Products Picture is required",
       })
     }
-    let mimeType = productpictures.mimetype.split("/")[1]
+    let mimeType = product_picture.mimetype.split("/")[1]
     let allowFile = ["jpeg", "jpg", "png", "webp"]
     if (!allowFile?.find((item) => item === mimeType)) {
       res.status(400).send({
@@ -186,7 +186,7 @@ const create = async (req, res) => {
         message: "Only accept jpeg, jpg, png, webp",
       })
     }
-    if (productpictures.size > 2000000) {
+    if (product_picture.size > 2000000) {
       res.status(400).send({
         status: false,
         message: "File to big, max size 2MB",
@@ -198,19 +198,19 @@ const create = async (req, res) => {
         message: "Stock is Not a Number",
       })
     }
-    const upload = cloudinary.uploader.upload(productpictures.tempFilePath, {
+    const upload = cloudinary.uploader.upload(product_picture.tempFilePath, {
       public_id: new Date().toISOString(),
     })
     upload
       .then(async (data) => {
         const payload = {
-          productpictures: data?.secure_url,
+          product_picture: data?.secure_url,
           title,
           price,
           stock,
           description,
           category,
-          storename,
+          store_name,
         }
         await model.create(payload)
         res.status(200).send({
@@ -241,7 +241,7 @@ const update = async (req, res) => {
         params: { id },
       } = req
       const {
-        body: { title, price, stock, description, category, storename },
+        body: { title, price, stock, description, category, store_name },
       } = req
       let checkData = await model.getById(id)
       if (!checkData?.length) {
@@ -256,7 +256,7 @@ const update = async (req, res) => {
         stock: stock ?? checkData[0].stock,
         description: description ?? checkData[0].description,
         category: category ?? checkData[0].category,
-        storename: storename ?? checkData[0].storename,
+        store_name: store_name ?? checkData[0].store_name,
       }
       if (payload.title.split(" ").length < 2) {
         res.status(400).json({
@@ -277,6 +277,68 @@ const update = async (req, res) => {
         message: "Success edit data",
         data: query,
       })
+    })
+  } catch (error) {
+    console.log(error)
+    res.status(500).send({
+      status: false,
+      message: "Error in server",
+    })
+  }
+}
+
+const updatePhoto = async (req, res) => {
+  try {
+    jwt.verify(getToken(req), process.env.JWT_PRIVATE_KEY, async (err) => {
+      const {
+        params: { id },
+      } = req
+      const { photo } = req?.files ?? {}
+      if (!photo) {
+        res.status(400).send({
+          status: false,
+          message: "Photo is required",
+        })
+        return
+      }
+      let mimeType = photo.mimetype.split("/")[1]
+      let allowFile = ["jpeg", "jpg", "png", "webp"]
+      if (!allowFile?.find((item) => item === mimeType)) {
+        res.status(400).send({
+          status: false,
+          message: "Only accept jpeg, jpg, png, webp",
+        })
+        return
+      }
+      if (photo.size > 2000000) {
+        res.status(400).send({
+          status: false,
+          message: "File to big, max size 2MB",
+        })
+        return
+      }
+      const upload = cloudinary.uploader.upload(photo.tempFilePath, {
+        public_id: new Date().toISOString(),
+      })
+      upload
+        .then(async (data) => {
+          const payload = {
+            product_picture: data?.secure_url,
+          }
+          await model.updatePhoto(payload, id)
+          res.status(200).send({
+            status: true,
+            message: "Success upload",
+            data: payload,
+          })
+        })
+        .catch((err) => {
+          console.log(err)
+          res.status(400).send({
+            status: false,
+            message: err,
+          })
+        })
     })
   } catch (error) {
     console.log(error)
@@ -321,6 +383,6 @@ module.exports = {
   getByCategory,
   create,
   update,
-  //   updatePhoto,
+  updatePhoto,
   deleteProducts,
 }
