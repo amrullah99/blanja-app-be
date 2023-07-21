@@ -269,74 +269,72 @@ const create = async (req, res) => {
 
 const update = async (req, res) => {
   try {
-    jwt.verify(getToken(req), process.env.JWT_PRIVATE_KEY, async (err) => {
-      const {
-        params: { id },
-      } = req
-      const {
-        body: {
-          product_id,
-          user_id,
-          quantity,
-          address_id,
-          total,
-          payment_id,
-          order_status,
-        },
-      } = req
-      let checkData = await model.getById(id)
-      if (!checkData?.length) {
-        res.json({
-          status: false,
-          message: `ID ${id} not found!`,
-        })
-      }
-      const payload = {
-        product_id: product_id ?? checkData[0].product_id,
-        user_id: user_id ?? checkData[0].user_id,
-        quantity: quantity ?? checkData[0].quantity,
-        address_id: address_id ?? checkData[0].address_id,
-        total: total ?? checkData[0].total,
-        created_at: checkData[0].created_at,
-        payment_id: payment_id ?? checkData[0].payment_id,
-        order_status: order_status ?? checkData[0].order_status,
-      }
-      if (isNaN(payload.product_id)) {
-        res.status(400).send({
-          status: false,
-          message: "Product ID is Not a Number",
-        })
-      }
-      if (isNaN(payload.user_id)) {
-        res.status(400).send({
-          status: false,
-          message: "User ID is Not a Number",
-        })
-      }
-      if (isNaN(payload.quantity)) {
-        res.status(400).send({
-          status: false,
-          message: "Quantity is Not a Number",
-        })
-      }
-      if (isNaN(payload.address_id)) {
-        res.status(400).send({
-          status: false,
-          message: "Address ID is Not a Number",
-        })
-      }
-      if (isNaN(payload.total)) {
-        res.status(400).send({
-          status: false,
-          message: "Total is Not a Number",
-        })
-      }
-      const query = await model.update(payload, id)
-      res.send({
-        status: true,
-        message: "Success edit data",
-        data: query,
+    const {
+      params: { id },
+    } = req
+    const {
+      body: {
+        product_id,
+        user_id,
+        quantity,
+        address_id,
+        total,
+        payment_id,
+        order_status,
+      },
+    } = req
+    let checkData = await model.getById(id)
+    if (!checkData?.length) {
+      res.json({
+        status: false,
+        message: `ID ${id} not found!`,
       })
+    }
+    const payload = {
+      product_id: product_id ?? checkData[0].product_id,
+      user_id: user_id ?? checkData[0].user_id,
+      quantity: quantity ?? checkData[0].quantity,
+      address_id: address_id ?? checkData[0].address_id,
+      total: total ?? checkData[0].total,
+      created_at: checkData[0].created_at,
+      payment_id: payment_id ?? checkData[0].payment_id,
+      order_status: order_status ?? checkData[0].order_status,
+    }
+    if (isNaN(payload.product_id)) {
+      res.status(400).send({
+        status: false,
+        message: "Product ID is Not a Number",
+      })
+    }
+    if (isNaN(payload.user_id)) {
+      res.status(400).send({
+        status: false,
+        message: "User ID is Not a Number",
+      })
+    }
+    if (isNaN(payload.quantity)) {
+      res.status(400).send({
+        status: false,
+        message: "Quantity is Not a Number",
+      })
+    }
+    if (isNaN(payload.address_id)) {
+      res.status(400).send({
+        status: false,
+        message: "Address ID is Not a Number",
+      })
+    }
+    if (isNaN(payload.total)) {
+      res.status(400).send({
+        status: false,
+        message: "Total is Not a Number",
+      })
+    }
+    const query = await model.update(payload, id)
+    res.send({
+      status: true,
+      message: "Success edit data",
+      data: query,
     })
   } catch (error) {
     console.log(error)

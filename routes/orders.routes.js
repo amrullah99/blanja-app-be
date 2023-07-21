@@ -7,7 +7,7 @@ router.get("/orders/:id", middleware, ordersController.getById)
 router.get("/orders/payment/:id", ordersController.getByPaymentId)
 router.get("/orders", middleware, ordersController.getAll)
 router.post("/orders", middleware, ordersController.create)
-router.patch("/orders/:id", middleware, ordersController.update)
+router.patch("/orders/:id", ordersController.update)
 router.delete("/orders/:id", middleware, ordersController.deleteOrders)
 
 module.exports = router
